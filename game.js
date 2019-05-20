@@ -23,11 +23,6 @@ class Game {
     tab.sort((a, b) => {
       return b.num - a.num
     })
-    // tab.forEach((data) => {
-    //   if (data.num > 4) {
-    //     fitn += data.num / 2048
-    //   }
-    // })
     fitn = map(tab[0].num, 2, 2048, 0, 0.4)
     if (tab[0].num != null) {
       if (tab[1].num != null) {
