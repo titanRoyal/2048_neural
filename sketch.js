@@ -1,4 +1,4 @@
-﻿let grid = [];
+let grid = [];
 const caro = 4;
 let scalar
 let spacing;
@@ -13,23 +13,12 @@ let r
 function setup() {
   rectMode(CENTER)
   createCanvas(600, 600);
-  // nn = new Genome(8, 4);
-  // // for (var i = 0; i < 4; i++) {
-  // //   nn.addNodeMutate()
-  // // }
-  // for (var i = 0; i < nn.input_num; i++) {
-  //   nn.addconnMutate()
-  // }
-//  butt = createButton("Reset It");
   select("canvas")
     .position((windowWidth - width) / 2, (windowHeight - height) / 2);
   real = width / caro;
   spacing = real / 20;
   scalar = (width) / caro - spacing;
-  // butt.mousePressed(resset)
-  //
-  // addtile();
-  r=new population(5000);
+  r = new population(4000);
 }
 
 function resset() {
@@ -64,10 +53,12 @@ function howlength(ghg) {
   }
   return count;
 }
-function draw(){
- r.show()
- r.update()
+
+function draw() {
+  r.show()
+  r.update()
 }
+
 function savedgrid() {
   let tab = []
   for (var i = 0; i < caro; i++) {
@@ -77,6 +68,7 @@ function savedgrid() {
   }
   return tab;
 }
+
 function keyPressed() {
   if (keyIsDown(UP_ARROW)) {
     if (r.combination("up", "n")[0] || r.shiffting("up", "n")[0]) {
@@ -128,22 +120,11 @@ function keyPressed() {
         r.combination("right")
         r.shiffting("right")
       }
-      //removeneww();
       r.addtile()
     }
   }
-  // if (gameover()) {
-  //   loop()
-  //   resset()
-  //   // push()
-  //   // fill("#bb2a0a");
-  //   // noStroke();
-  //   // textSize(50);
-  //   // text("Game Over \n Restart\n :)", width / 2, height / 2)
-  //   // pop()
-  //   // noLoop();
-  // }
 }
+
 function trainnnn() {
   for (var j = 0; j < 500; j++) {
     for (var i = 0; i < data.length; i++) {
@@ -153,20 +134,6 @@ function trainnnn() {
   }
   shuffle(data, true)
 }
-// function swappping(xc, yc) {
-//   if (xc.x == yc.x) {
-//     if (yc.y > xc.y) {
-//       let count = 0;
-//       while (count < scalar + spacing) {
-//         yc.y -= 0.01;
-//         xc.y += 0.01;
-//         count += 0.01;
-// 								showing()
-//         //	console.log(count);
-//       }
-//     }
-//   }
-// }
 function all_in(hh, x = 1) {
   for (var i = 0; i < x; i++) {
     addfile(hh)
@@ -225,7 +192,4 @@ function algoplay() {
       break;
 
   }
-}
-Array.prototype.max=function(data){
-
 }
