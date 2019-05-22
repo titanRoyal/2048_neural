@@ -13,6 +13,7 @@ class Game {
       this.grid[i] = []
       for (var j = 0; j < caro; j++) {
         this.grid[i][j] = new cell(i * real + real / 2, j * real + real / 2, scalar - spacing)
+        
       }
     }
     this.addtile()
