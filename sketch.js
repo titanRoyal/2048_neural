@@ -22,7 +22,6 @@ function setup() {
 }
 
 function resset() {
-  //nn.mutate()
   for (var i = 0; i < caro; i++) {
     for (var j = 0; j < caro; j++) {
       grid[i][j].num = null;
