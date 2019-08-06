@@ -43,7 +43,7 @@ class population {
     }
     this.matingpool = [];
     for (var i = 0; i < x.length; i++) {
-      if (x[i].fitness > 0.4) {
+      if (x[i].fitness > 0.3) {
         for (var j = 0; j < x[i].fitness * 100; j++) {
           this.matingpool.push(x[i]);
         }
@@ -52,7 +52,8 @@ class population {
 
   }
   selection(x) {
-    this.neural[0] = x[x.length - 1];
+    this.neural[0] = new Game(x[x.length - 1].brain.weight);
+
     for (var i = 1; i < x.length; i++) {
       let g = [];
       let partA = random(this.matingpool).brain.weight;

@@ -30,40 +30,28 @@ function color_it(x) {
   switch (x) {
     case null:
       return "#d98911"
-      break;
     case 2:
       return "#9c1136"
-      break;
     case 4:
       return "#1f0cc1"
-      break;
     case 8:
       return "#1295be"
-      break;
     case 16:
       return "#09b361"
-      break;
     case 32:
       return "#28c60e"
-      break;
     case 64:
       return "#398e0c"
-      break;
     case 128:
       return "#97c820"
-      break;
     case 256:
       return "#b1261d"
-      break;
     case 512:
       return "#e1e616"
-      break;
     case 1024:
       return "#51753e"
-      break;
     case 2048:
       return "#dfdd14"
-      break;
     default:
       return "#601b09"
   }

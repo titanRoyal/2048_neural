@@ -18,7 +18,7 @@ function setup() {
   real = width / caro;
   spacing = real / 20;
   scalar = (width) / caro - spacing;
-  r = new population(4000);
+  r = new population(1000);
 }
 
 function resset() {

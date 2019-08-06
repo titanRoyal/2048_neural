@@ -1,6 +1,6 @@
 class Game {
   constructor(x) {
-    this.brain = new neural_net(Math.pow(caro, 2) + 8, [10], 4)
+    this.brain = new neural_net(Math.pow(caro, 2) + 8, [20], 4)
     if (x) {
       this.brain.weight = x;
       this.brain.mutate(mutate);
@@ -13,7 +13,7 @@ class Game {
       this.grid[i] = []
       for (var j = 0; j < caro; j++) {
         this.grid[i][j] = new cell(i * real + real / 2, j * real + real / 2, scalar - spacing)
-        
+
       }
     }
     this.addtile()

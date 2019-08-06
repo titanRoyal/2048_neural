@@ -22,7 +22,7 @@ class matrix {
   static crossover(a, b) {
     let m = new matrix(a.row, a.col)
     for (var i = 0; i < a.row; i++) {
-      	let h = random( a.col );
+      let h = random(a.col);
       for (var j = 0; j < a.col; j++) {
         if (j > h) {
           m.matrox[i][j] = a.matrox[i][j];
@@ -169,7 +169,16 @@ class matrix {
   }
 
 }
-matrix.prototype.add = function(n) {
+matrix.prototype.Mutate = function () {
+  for (let i = 0; i < this.row; i++) {
+    for (let j = 0; j < this.col; j++) {
+      if(random(1)>0.6){
+        this.matrox[i][j]=random(1);
+      }
+    }
+  }
+}
+matrix.prototype.add = function (n) {
   if (n instanceof matrix) {
     for (let i = 0; i < this.row; i++) {
       for (let j = 0; j < this.col; j++) {
@@ -184,7 +193,7 @@ matrix.prototype.add = function(n) {
     }
   }
 }
-matrix.prototype.mult = function(n) {
+matrix.prototype.mult = function (n) {
   if (n instanceof matrix) {
     for (let i = 0; i < this.row; i++) {
       for (let j = 0; j < this.col; j++) {
@@ -199,10 +208,10 @@ matrix.prototype.mult = function(n) {
     }
   }
 }
-matrix.prototype.print = function() {
+matrix.prototype.print = function () {
   console.table(this.matrox);
 }
-matrix.prototype.randomize = function() {
+matrix.prototype.randomize = function () {
   for (let i = 0; i < this.row; i++) {
     for (let j = 0; j < this.col; j++) {
       this.matrox[i][j] = Math.random() * 2 - 1;
@@ -210,7 +219,7 @@ matrix.prototype.randomize = function() {
   }
 
 }
-matrix.prototype.transpose = function() {
+matrix.prototype.transpose = function () {
   let r = new matrix(this.col, this.row)
   for (let i = 0; i < this.row; i++) {
     for (let j = 0; j < this.col; j++) {
@@ -219,7 +228,7 @@ matrix.prototype.transpose = function() {
   }
   this.matrox = r.matrox;
 }
-matrix.prototype.map = function(func) {
+matrix.prototype.map = function (func) {
   for (let i = 0; i < this.row; i++) {
     for (let j = 0; j < this.col; j++) {
       this.matrox[i][j] = func(this.matrox[i][j]);

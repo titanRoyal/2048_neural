@@ -1,50 +1,68 @@
-function neural_net(inp, nh, o) {
-  if (inp instanceof neural_net) {
-    this.input_n = private(inp.input_n);
-    this.hiden_n = private(inp.hiden_n);
-    this.hiden_layer = private(inp.hiden_layer);
-    this.output_n = private(inp.output_n);
-    this.lr = private(inp.lr);
-    this.weight = private([]);
-    this.bias = private([]);
-    for (var i = 0; i < inp.weight.length; i++) {
-      this.weight[i] = inp.weight[i].copy()
-    }
-    for (i = 0; i < inp.bias.length; i++) {
-      this.bias[i] = inp.bias[i].copy()
-    }
-  } else {
-    this.input_n = inp;
-    this.hiden_n = nh;
-    this.hiden_layer = nh.length;
-    this.output_n = o;
-    this.lr = 0.055;
-    this.weight = [];
-    this.bias = []
-    for (var i = 0; i < this.hiden_layer + 1; i++) {
-      if (i == 0) {
-        this.weight[i] = new matrix(this.hiden_n[i], this.input_n);
-      } else if (i == this.hiden_layer) {
-        this.weight[i] = new matrix(this.output_n, this.hiden_n[i - 1]);
-        this.bias[i] = new matrix(this.output_n, 1);
-        this.bias[i].randomize();
-      } else {
-        this.weight[i] = new matrix(this.hiden_n[i], this.hiden_n[i - 1]);
-        this.bias[i] = new matrix(this.hiden_n[i], 1);
+class neural_net {
+  //setting up the neural network layers
+  constructor(inp, nh, o, lr = 0.055) {
+    if (inp instanceof neural_net) {
+      this.input_n = inp.input_n;
+      this.hiden_n = inp.hiden_n
+      this.hiden_layer = inp.hiden_layer;
+      this.output_n = inp.output_n;
+      //learning rate variables
+      this.epochs = 0;
+      this.lr_decay = 1;
+      this.alpha0 = 0.2;
+      this.lr;
+      //////////////////
+      this.weight = [];
+      this.bias = [];
+      for (var i = 0; i < inp.weight.length; i++) {
+        this.weight[i] = inp.weight[i].copy()
+      }
+      for (i = 0; i < inp.bias.length; i++) {
+        this.bias[i] = inp.bias[i].copy()
+      }
+    } else {
+      this.input_n = inp;
+      this.hiden_n = nh;
+      this.hiden_layer = nh.length;
+      this.output_n = o;
+      //learnin rate variables
+      this.epochs = 0;
+      this.lr_decay = 1;
+      this.alpha0 = 0.2;
+      this.lr = lr;
+      this.weight = [];
+      this.bias = []
+      for (var i = 0; i < this.hiden_layer + 1; i++) {
+        if (i == 0) {
+          this.weight[i] = new matrix(this.hiden_n[i], this.input_n);
+        } else if (i == this.hiden_layer) {
+          this.weight[i] = new matrix(this.output_n, this.hiden_n[i - 1]);
+          this.bias[i] = new matrix(this.output_n, 1);
+          this.bias[i].randomize();
+        } else {
+          this.weight[i] = new matrix(this.hiden_n[i], this.hiden_n[i - 1]);
+          this.bias[i] = new matrix(this.hiden_n[i], 1);
+          this.bias[i].randomize();
+        }
+        this.weight[i].randomize();
+      }
+      for (var i = 0; i < this.hiden_layer + 1; i++) {
+        if (i == this.hiden_layer) {
+          this.bias[i] = new matrix(this.output_n, 1);
+        } else {
+          this.bias[i] = new matrix(this.hiden_n[i], 1);
+        }
         this.bias[i].randomize();
       }
-      this.weight[i].randomize();
-    }
-    for (var i = 0; i < this.hiden_layer + 1; i++) {
-      if (i == this.hiden_layer) {
-        this.bias[i] = new matrix(this.output_n, 1);
-      } else {
-        this.bias[i] = new matrix(this.hiden_n[i], 1);
-      }
-      this.bias[i].randomize();
     }
   }
-  this.feedforward = function(inp) {
+  //learning rate decay
+  // decay(){
+  //   this.epochs++;
+  //   retrun (1/(1+this.lr_decay*this.epochs))*this.alpha0;
+  // }
+  //inserting input funtion to recive the neural network output
+  feedforward(inp) {
     let inputs = matrix.fromarray(inp);
     let sum_h;
     for (var i = 0; i < this.weight.length; i++) {
@@ -55,17 +73,15 @@ function neural_net(inp, nh, o) {
     }
     return matrix.toarray(inputs);
   }
-
-  this.train = function(input, answer) {
-    //	let output = this.feedforward( input );
-    //////////////////////////////////////////////////
+  //training the neural network by tuning the weight
+  train(input, answer) {
+    // this.lr=this.decay();
     let inputs = matrix.fromarray(input);
     let target = matrix.fromarray(answer);
     let output;
     let err_tab = [];
     let gradiant = [];
     let deltaw = [];
-
     let sum_h = [];
     sum_h[0] = inputs;
     for (var i = 0; i < this.weight.length; i++) {
@@ -109,10 +125,32 @@ function neural_net(inp, nh, o) {
       this.weight[i].add(deltaw[i]);
     }
   }
-  this.copy = function() {
+  copy() {
     return new neural_net(this);
   }
-  this.mutate = function(func) {
+  saveData() {
+    let r = {
+      weights: this.weight,
+      bias: this.bias
+    }
+    saveJSON(r, "data.json")
+  }
+  loadData(path) {
+    loadJSON(path, (data) => {
+      if (data.weights.length == this.weight.length && data.bias.length == this.bias.length) {
+        this.weight.forEach((data1,index)=>{
+          data1.matrox=data.weights[index].matrox
+        })
+        this.bias.forEach((data1,index)=>{
+          data1.bias=data.bias[index].matrox
+        })
+        console.log("loaded");
+      } else {
+        console.log("not compatible");
+      }
+    })
+  }
+  mutate(func) {
     for (var i = 0; i < this.weight.length; i++) {
       this.weight[i].map(func)
     }
@@ -129,14 +167,4 @@ function sigmoid(x) {
 
 function dsigmoidA(x) {
   return x * (1 - x);
-}
-
-function addall(xy) {
-  let r = 0;
-  for (var i = 0; i < xy.row; i++) {
-    for (var j = 0; j < xy.col; j++) {
-      r += xy.matrox[i][j];
-    }
-  }
-  return r;
 }
